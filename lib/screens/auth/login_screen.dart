@@ -15,6 +15,7 @@ class LoginScreen extends StatelessWidget {
             const Icon(Icons.lock, size: 80, color: Colors.blue),
             const SizedBox(height: 20),
             const TextField(
+              
               decoration: InputDecoration(labelText: "Correo", prefixIcon: Icon(Icons.email)),
             ),
             const SizedBox(height: 15),
