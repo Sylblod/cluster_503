@@ -23,7 +23,7 @@ class _InscripcionFormScreenState extends State<InscripcionFormScreen> {
   String? _cintaSeleccionada;
 
   final List<String> _cintas = [
-    'Blanca', 'Amarilla', 'Verde', 'Azul', 'Roja', 'Negra'
+    'Blanca', 'Amarilla', 'Naranja', 'Verde', 'Azul', 'Morada', 'Cafe', 'Marron','Roja', 'Negra Poom', 'Negra Dan'
   ];
 
   void _enviarFormulario() async {
