@@ -3,12 +3,14 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;// Ajusta esta ruta a donde esté tu modelo
 
 class DataService {
-  // Poner aquí la URL de tu Worker de Cloudflare
-  final String apiUrl = "https://fr1.cluster503rj.workers.dev/api/eventos"; 
+  //ver eventos
+  final String apiEventos = "https://fr1.cluster503rj.workers.dev/api/eventos";
+  //modo general
+  final String apiInserta = "https://fr1.cluster503rj.workers.dev/api/insertar";
 
   Future<List<EventoTKD>> getEventos() async {
     try {
-      final response = await http.get(Uri.parse(apiUrl));
+      final response = await http.get(Uri.parse(apiEventos));
 
       if (response.statusCode == 200) {
         // Decodificar el JSON
@@ -29,9 +31,28 @@ class DataService {
   }
 
   Future<bool> inscribirAlumno(Map<String, dynamic> datos) async {
-    await Future.delayed(const Duration(seconds: 2));
-    // Aquí iría el código real de http.post
-    print("Enviando a Cloudflare: $datos");
-    return true;
+    try {
+      String cuerpoJson = jsonEncode(datos);
+      final response = await http.post(
+        Uri.parse(apiInserta), 
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+        },
+        body: cuerpoJson,
+      );
+
+      // Verificamos si el servidor respondió con éxito (200 OK o 201 Created)
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        print("Inscripción exitosa: ${response.body}");
+        return true; 
+      } else {
+        print("Error en el servidor: ${response.statusCode} - ${response.body}");
+        return false;
+      }
+    } catch (e) {
+      print("Error de conexión al enviar: $e");
+      return false;
+    }
   }
 }
