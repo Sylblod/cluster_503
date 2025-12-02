@@ -1,5 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart'; // Necesario para forzar mayúsculas
+import 'package:flutter/material.dart'; // Necesario para forzar mayúsculas
 import '../../models/evento_model.dart'; 
 import '../../services/data_service.dart';
 
@@ -7,7 +6,7 @@ class InscripcionFormScreen extends StatefulWidget {
   final EventoTKD evento;
 
   const InscripcionFormScreen({super.key, required this.evento});
-
+  
   @override
   State<InscripcionFormScreen> createState() => _InscripcionFormScreenState();
 }
@@ -44,7 +43,6 @@ class _InscripcionFormScreenState extends State<InscripcionFormScreen> {
 
   final List<String> _opcionesModalidad = ['Formas', 'Combate', 'Circuito Motriz'];
 
-  // --- LÓGICA DE ENVÍO ---
   void _enviarFormulario() async {
     if (_formKey.currentState!.validate()) {
       
@@ -65,8 +63,6 @@ class _InscripcionFormScreenState extends State<InscripcionFormScreen> {
       }
 
       setState(() => _isLoading = true);
-
-      // Empaquetar datos (JSON)
       final datos = {
         "nombre": _nombreCtrl.text,
         "email": _emailCtrl.text,

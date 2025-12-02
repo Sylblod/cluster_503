@@ -1,12 +1,15 @@
 import '../models/evento_model.dart';
+import '../models/user_model.dart';
 import 'dart:convert';
-import 'package:http/http.dart' as http;// Ajusta esta ruta a donde esté tu modelo
+import 'package:http/http.dart' as http;
 
 class DataService {
   //ver eventos
   final String apiEventos = "https://fr1.cluster503rj.workers.dev/api/eventos";
   //modo general
   final String apiInserta = "https://fr1.cluster503rj.workers.dev/api/insertar";
+  //Login
+  final String apiLogin = "https://fr1.cluster503rj.workers.dev/api/login";
 
   Future<List<EventoTKD>> getEventos() async {
     try {
@@ -42,7 +45,6 @@ class DataService {
         body: cuerpoJson,
       );
 
-      // Verificamos si el servidor respondió con éxito (200 OK o 201 Created)
       if (response.statusCode == 200 || response.statusCode == 201) {
         print("Inscripción exitosa: ${response.body}");
         return true; 
@@ -53,6 +55,35 @@ class DataService {
     } catch (e) {
       print("Error de conexión al enviar: $e");
       return false;
+    }
+  }
+
+  Future<UsuarioTKD> login(Map<String, dynamic> datos) async {
+    try {
+      String cuerpoJson = jsonEncode(datos);
+      final response = await http.post(
+        Uri.parse(apiLogin), 
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+        },
+        body: cuerpoJson,
+      );
+     if (response.statusCode == 200) {
+
+      final Map<String, dynamic> respuestaJson = jsonDecode(response.body);
+      
+      final Map<String, dynamic> datosUsuario = respuestaJson['usuario'];
+
+      return UsuarioTKD.fromJson(datosUsuario);
+      
+    } else {
+      print("Error login: ${response.body}");
+      throw Exception('Fallo al iniciar sesión: ${response.statusCode}');
+    }
+    } catch (e) {
+      print("Error de conexión al iniciar sesión: $e");
+      throw Exception('Error de conexión: $e');
     }
   }
 }

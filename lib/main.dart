@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'screens/public/home_screen.dart';
 import 'screens/auth/login_screen.dart';
 import 'screens/public/eventos_screen.dart';
+import 'screens/teachers/dashboard_screen.dart';
 
 void main() {
   runApp(const AppCluster503());
@@ -38,13 +39,12 @@ class AppCluster503 extends StatelessWidget {
           ),
         ),
       ),
-
-     
       initialRoute: '/',
       routes: {
         '/': (context) => const PublicHomeScreen(),
          '/eventos': (context) => const EventosScreen(), 
-         '/login': (context) => const LoginScreen(),    
+         '/login': (context) => const LoginScreen(),
+         '/dashboard': (context) => const DashboardScreen(),
       },
     );
   }
