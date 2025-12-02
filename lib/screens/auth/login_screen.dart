@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../services/data_service.dart';
+import '../admin/admin_dashboard_screen.dart';
+import '../teachers/dashboard_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -30,30 +32,52 @@ class _LoginScreenState extends State<LoginScreen> {
         "email": _emailCtrl.text,
         "password": _passwordCtrl.text,
       };
+      try {
 
       final exito = await _service.login(datos);
-
-      setState(() => _isLoading = false);
       
-      if (exito.token != null && mounted) {
+      if (exito.rol != '' && mounted) {
         
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Bienvenido ${exito.nombreCompleto}')),
-        );
+      
+        print('Valor: ${exito.activo}');
+        print('Tipo de dato: ${exito.activo.runtimeType}');
+        print('Valor: ${exito.rol}');
+        print('Tipo de dato: ${exito.rol.runtimeType}');
         
-        Navigator.pushReplacementNamed(context, '/dashboard', arguments: exito); 
-        
-      } else {
-        // Si usuarioRecibido es null, falló el login
-        if (mounted) {
+        if ( exito.activo == 0) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
-              content: Text('Error: Correo o contraseña incorrectos'),
+              content: Text('Error: Usuario inactivo'),
               backgroundColor: Colors.red,
             ),
           );
+          setState(() => _isLoading = false);
+          return;
         }
+          ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Bienvenido ${exito.nombreCompleto}')),
+        );
+
+        if (exito.rol == 'Admin') {
+          //Navigator.pushReplacementNamed(context, '/admin_dashboard', arguments: exito);
+          Navigator.pushAndRemoveUntil(context,MaterialPageRoute(builder: (context) => AdminDashboardScreen(usuario: exito)),(route) => false,);
+          return;
+        }else if (exito.rol == 'Teacher') {
+        //Navigator.pushReplacementNamed(context, '/dashboard', arguments: exito); 
+        Navigator.pushAndRemoveUntil(context,MaterialPageRoute(builder: (context) => DashboardScreen(usuario: exito)),(route) => false,);
       }
+      }
+      }
+      catch (e) {
+        if (mounted) {
+          setState(() => _isLoading = false);
+          
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Error: Correo o contraseña incorrectos'),
+              backgroundColor: Colors.red,)
+        );
+      } }
     }
   }
 

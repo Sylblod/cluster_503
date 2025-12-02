@@ -1,38 +1,43 @@
 class UsuarioTKD {
   final int id;
+  final int activo;
   final String email;
-  final String nombreCompleto; 
+  final String nombreCompleto;
   final String rol;
   final String? token;
+  final String event;
 
   UsuarioTKD({
     required this.id,
+    required this.activo,
     required this.email,
     required this.nombreCompleto,
     required this.rol,
-    this.token,
+    required this.token,
+    required this.event,
   });
 
-  // Factory para convertir el JSON de Cloudflare a tu Objeto Dart
   factory UsuarioTKD.fromJson(Map<String, dynamic> json) {
     return UsuarioTKD(
-      id: json['id'], 
-      email: json['email'],
-      // Ojo aquí: mapeamos la clave del JSON a la variable de Dart
-      nombreCompleto: json['nombre_completo'] ?? 'Sin Nombre', 
-      rol: json['rol'] ?? 'usuario',
-      token: json['token'],
+      id: json['id'] ?? 0,
+      email: json['email'] ?? '',
+      nombreCompleto: json['name'] ?? 'Sin Nombre',
+      rol: json['role'] ?? '',
+      token: json['reset_token'],
+      event: json['event'] ?? '',
+      activo: json['is_active'] ?? 0, 
     );
   }
 
-  // Para guardar el usuario (útil más adelante)
   Map<String, dynamic> toJson() {
     return {
       'id': id,
       'email': email,
-      'nombre_completo': nombreCompleto,
-      'rol': rol,
-      'token': token,
+      'name': nombreCompleto,
+      'role': rol,
+      'reset_token': token,
+      'event': event,
+      'is_active': activo,
     };
   }
 }

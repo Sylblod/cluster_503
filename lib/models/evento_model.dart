@@ -28,4 +28,16 @@ class EventoTKD {
       activo: (json['activo'] == 1), 
     );
   }
+
+   Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'titulo': titulo,
+      'fecha': fecha,
+      'lugar': lugar,
+      'tipo': tipo,
+      'imagenUrl': imagenUrl,
+      'activo': activo ? 1 : 0,
+    };
+  }
 }
