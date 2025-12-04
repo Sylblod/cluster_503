@@ -13,6 +13,9 @@ class DataService {
 
   //modo general
   final String apiInserta = "https://fr1.cluster503rj.workers.dev/api/insertar";
+  final String apiMostrarParticipantes = "https://fr1.cluster503rj.workers.dev/api/listar";
+  final String apiActualizarParticipante = "https://fr1.cluster503rj.workers.dev/api/participantes/actualizar";
+  final String apiEliminarParticipante = "https://fr1.cluster503rj.workers.dev/api/participantes/eliminar";
   //Login
   final String apiLogin = "https://fr1.cluster503rj.workers.dev/api/login";
   //usuarios
@@ -23,7 +26,7 @@ class DataService {
   final String apiActualizarUsuario = "https://fr1.cluster503rj.workers.dev/api/user/actualizar";
   final String apiEliminarUsuario = "https://fr1.cluster503rj.workers.dev/api/user/eliminar";
   //participantes
-  final String apiMostrarParticipantes = "https://fr1.cluster503rj.workers.dev/api/listar";
+  
 
   Future<List<EventoTKD>> getEventos() async {
     try {
@@ -214,7 +217,7 @@ class DataService {
 
   Future<bool> deleteEvento(int id) async {
   try {
-    final response = await http.delete(Uri.parse('$apiActualizarEvento?id=$id'), 
+    final response = await http.delete(Uri.parse('$apiEliminarEvento?id=$id'), 
       headers: {
         "Content-Type": "application/json",
         "Accept": "application/json",
@@ -281,6 +284,46 @@ class DataService {
         "success": false,
         "message": "Error de conexión: $e"
       };
+    }
+  }
+
+  Future<bool> deleteParticipante(int id) async {
+  try {
+    final response = await http.delete(Uri.parse('$apiEliminarParticipante?id=$id'), 
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+      },
+    );
+
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      print('Error al eliminar: ${response.body}');
+      return false;
+    }
+  } catch (e) {
+    print('Error de conexión: $e');
+    return false;
+  }
+  }
+
+  Future<bool> updateParticipante(ParticipantesTKD participante) async {
+    try {
+       final response = await http.put(Uri.parse(apiActualizarParticipante),
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode(participante.toJson()),
+      );
+
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        print('Error al actualizar: ${response.body}');
+        return false;
+      }
+    } catch (e) {
+      print('Error de conexión: $e');
+      return false;
     }
   }
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../services/data_service.dart';
 import '../../models/participants_model.dart';
+import 'edit_participants_screen.dart';
 
 class ViewUserScreenParticipants extends StatefulWidget {
   const ViewUserScreenParticipants({super.key});
@@ -27,7 +28,6 @@ class _ViewUserScreenParticipantsState extends State<ViewUserScreenParticipants>
     _cargarparticipantess();
   }
 
-  // Carga inicial de datos
   void _cargarparticipantess() async {
     setState(() => _isLoading = true);
     try {
@@ -61,6 +61,43 @@ class _ViewUserScreenParticipantsState extends State<ViewUserScreenParticipants>
         return coincideTexto && coinciderama && coincideEvento;
       }).toList();
     });
+  }
+
+    void _editarParticipante(ParticipantesTKD participante) async {
+    final resultado = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => EditParticipantsScreen(participante: participante)),
+    );
+    if (resultado == true) _cargarparticipantess();
+  }
+
+  void _confirmarEliminar(ParticipantesTKD participante) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('¿Eliminar participante?'),
+        content: Text('Vas a eliminar al participante "${participante.nombre}".'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(),
+            child: const Text('Cancelar'),
+          ),
+          TextButton(
+            onPressed: () async {
+              Navigator.of(ctx).pop();
+              bool exito = await _dataService.deleteParticipante(participante.id);
+              if (mounted && exito) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                   const SnackBar(content: Text('Eliminado'), backgroundColor: Colors.green)
+                );
+                _cargarparticipantess();
+              }
+            },
+            child: const Text('Eliminar', style: TextStyle(color: Colors.red)),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -144,6 +181,7 @@ class _ViewUserScreenParticipantsState extends State<ViewUserScreenParticipants>
                               DataColumn(label: Text('Maestro')),
                               DataColumn(label: Text('Rama')),
                               DataColumn(label: Text('Modalidad')),
+                              DataColumn(label: Text('Acciones')),
                             ],
                             rows: _listaFiltrada.map((participantes) {
                               return DataRow(cells: [
@@ -162,6 +200,15 @@ class _ViewUserScreenParticipantsState extends State<ViewUserScreenParticipants>
                                   )
                                 ),
                                 DataCell(Text(participantes.modalidad)),
+                                DataCell(
+                                  Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      IconButton(icon: const Icon(Icons.edit, color: Colors.blue), onPressed: () => _editarParticipante(participantes)),
+                                      IconButton(icon: const Icon(Icons.delete, color: Colors.red), onPressed: () => _confirmarEliminar(participantes)),
+                                    ],
+                                  ),
+                                ),
                               ]);
                             }).toList(),
                           ),

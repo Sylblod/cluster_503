@@ -80,6 +80,15 @@ class AdminDashboardScreen extends StatelessWidget {
             ruta: '/view_events_screen',
             color: Colors.teal,
           ),
+          const SizedBox(height: 15),
+          _buildAdminOption(
+            context,
+            icon: Icons.adb,
+            title: "Ver Participantes",
+            subtitle: "Ver, editar, eliminar los participantes",
+            ruta: '/view_user_screen_participants',
+            color: Colors.orange,
+          ),
         ],
       ),
     );

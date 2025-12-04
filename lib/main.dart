@@ -8,7 +8,10 @@ import 'screens/admin/edit_users_screen.dart';
 import 'screens/admin/create_events_screen.dart';
 import 'screens/admin/view_events_screen.dart';
 import 'screens/admin/edit_events_screen.dart';
-import 'screens/teachers/view_user_screen.dart';
+import 'screens/admin/view_participants_screen.dart';
+import 'screens/teachers/view_participants_screen.dart';
+
+
 
 void main() {
   runApp(const AppCluster503());
@@ -58,8 +61,8 @@ class AppCluster503 extends StatelessWidget {
         '/create_events_screen': (context) => const CreateEventsScreen(),
         '/view_events_screen': (context) => const ViewEventsScreen(),
         '/edit_events_screen': (context) => const EditEventsScreen(),
-        //teachers
         '/view_user_screen_participants': (context) => const ViewUserScreenParticipants(),
+        '/view_user_screen_participantsteacher': (context) => const ViewUserScreenParticipantsTeacher(),
         
 
 

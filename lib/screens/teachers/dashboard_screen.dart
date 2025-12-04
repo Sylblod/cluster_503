@@ -50,7 +50,7 @@ class DashboardScreen extends StatelessWidget {
             icon: Icons.manage_accounts,
             title: "Participantes Inscritos",
             subtitle: "Ver los participantes",
-            ruta: '/view_user_screen_participants',
+            ruta: '/view_user_screen_participantsteacher',
             color: Colors.teal,
           ),
           const SizedBox(height: 15),
